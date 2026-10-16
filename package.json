@@ -8,8 +8,7 @@
         "dev": "vite",
         "watch": "vite build --watch",
         "build": "vite build",
-        "doctor": "node doctor.js --call",
-        "validate": "curl -sSfL https://raw.githubusercontent.com/Severino/Spacialist/refs/heads/0.12-feat-plugin-xml-schema/schemas/plugin-xml/v1/schema.xsd -o node_modules/.plugin-schema.xsd && xmllint --noout --schema node_modules/.plugin-schema.xsd plugin.xml"
+        "doctor": "node doctor.js --call"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.5.2",

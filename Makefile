@@ -7,8 +7,6 @@ package_root=$(shell node -p -e "require('./package.json').pluginName")
 script_name=$(shell node -p -e "require('./package.json').pluginName.toLowerCase()").umd.js
 plugin_dir=$(build_src)/$(package_root)
 
-schema_url=https://raw.githubusercontent.com/Severino/Spacialist/refs/heads/0.12-feat-plugin-xml-schema/schemas/plugin-xml/v1/schema.xsd
-
 # Everything that goes into the package. Keep these lists up to date:
 # add every folder or file you create that the plugin needs at runtime.
 backend_dirs=App Attributes migrations routes
@@ -24,11 +22,6 @@ npm_init:
 
 npm_build:
 	npx vite build
-
-validate:
-	mkdir -p $(build_dir)
-	curl -sSfL $(schema_url) -o $(build_dir)/plugin-schema.xsd
-	xmllint --noout --schema $(build_dir)/plugin-schema.xsd plugin.xml
 
 # remove build dir
 clean:
@@ -49,4 +42,4 @@ package: clean
 	(cd $(build_src) && zip ../$(package_name).zip -r .)
 	rm -rf $(build_src)
 
-.PHONY: release prebuild_release npm_init npm_build validate clean package
+.PHONY: release prebuild_release npm_init npm_build clean package

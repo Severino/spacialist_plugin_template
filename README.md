@@ -19,7 +19,7 @@ To setup the plugin to be ready for development follow these steps:
 ## Structure
 
 ```
-plugin.xml          # Manifest - REQUIRED. Validate with `npm run validate` or `make validate`
+plugin.xml          # Manifest - REQUIRED
 App/                # Backend classes
 Attributes/         # Custom attribute types (registered in <attributes>)
 migrations/         # Laravel migrations (registered in <migrations>)
@@ -32,11 +32,11 @@ Every backend class lives in the namespace `App\Plugins\{PluginName}\{Folder}`, 
 
 ## Manifest
 
-All features are declared in `plugin.xml`. The schema is not part of the template, `plugin.xml` links it from the Spacialist repository (currently the branch `0.12-feat-plugin-xml-schema`). The root element is `<plugin>` (the old `<info>` root and `App/info.xml` location still work but are deprecated). The template declares its routes and migrations explicitly, so the deprecated defaults (`routes/api.php` without `<routes>`, the `Migration` folder) are not used. Add `<permissions>` and `<role-presets>` (see the commented examples) only when your plugin needs them.
+All features are declared in `plugin.xml`. `plugin.xml` references the schema in the Spacialist repository, so editors with XML support can validate and autocomplete it. The root element is `<plugin>` (the old `<info>` root and `App/info.xml` location still work but are deprecated). The template declares its routes and migrations explicitly, so the deprecated defaults (`routes/api.php` without `<routes>`, the `Migration` folder) are not used. Add the other sections from the table below when your plugin needs them.
 
 | Element | What it does |
 |---|---|
-| `<dependencies>` | `<core min="..."/>` and `<plugin name="..." min="..." max="..."/>` |
+| `<dependencies>` | `<core min="..."/>` and `<plugin name="..." min="..." max="..."/>`. The core version is read from `git describe`, so `<core min="0.12.0"/>` only works once 0.12.0 is tagged |
 | `<routes src="" middleware="api"/>` | Routes file. The `api` group has no authentication, add `auth:sanctum` yourself |
 | `<migrations src=""/>` | Migration folder |
 | `<permissions src=""/>` | Permissions json |
