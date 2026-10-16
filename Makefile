@@ -41,5 +41,3 @@ package: clean
 	   --directory="$(build_src)" $(package_root)
 	(cd $(build_src) && zip ../$(package_name).zip -r .)
 	rm -rf $(build_src)
-
-.PHONY: release prebuild_release npm_init npm_build clean package
