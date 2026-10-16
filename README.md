@@ -19,11 +19,9 @@ To setup the plugin to be ready for development follow these steps:
 ## Structure
 
 ```
-plugin.xml          # Manifest - REQUIRED. Schema: plugin.xsd
-plugin.xsd          # Manifest schema, validate with `npm run validate` or `make validate`
-App/                # Backend classes, permissions.json and role-presets.json
+plugin.xml          # Manifest - REQUIRED. Validate with `npm run validate` or `make validate`
+App/                # Backend classes
 Attributes/         # Custom attribute types (registered in <attributes>)
-Controllers/        # Controllers for routes/api.php
 migrations/         # Laravel migrations (registered in <migrations>)
 routes/api.php      # Plugin routes, mounted under api/v1/{plugin-slug}
 src/                # Frontend sources, src/main.js is the entry point
@@ -34,7 +32,7 @@ Every backend class lives in the namespace `App\Plugins\{PluginName}\{Folder}`, 
 
 ## Manifest
 
-All features are declared in `plugin.xml`. The root element is `<plugin>` (the old `<info>` root and `App/info.xml` location still work but are deprecated). The template declares every path explicitly, so none of the deprecated defaults (`routes/api.php` without `<routes>`, the `Migration` folder, a root `role-presets.json`) are used.
+All features are declared in `plugin.xml`. The schema is not part of the template, `plugin.xml` links it from the Spacialist repository (currently the branch `0.12-feat-plugin-xml-schema`). The root element is `<plugin>` (the old `<info>` root and `App/info.xml` location still work but are deprecated). The template declares its routes and migrations explicitly, so the deprecated defaults (`routes/api.php` without `<routes>`, the `Migration` folder) are not used. Add `<permissions>` and `<role-presets>` (see the commented examples) only when your plugin needs them.
 
 | Element | What it does |
 |---|---|
@@ -49,8 +47,8 @@ All features are declared in `plugin.xml`. The root element is `<plugin>` (the o
 | `<scopes><scope src="Scopes/X" on="App\Entity"/></scopes>` | Global Eloquent scopes on core models |
 | `<accesspoints><accesspoint id="" label="" path=""/></accesspoints>` | Own top level pages |
 
-See `plugin.xsd` for all attributes and defaults.
+See the [schema](https://raw.githubusercontent.com/Severino/Spacialist/refs/heads/0.12-feat-plugin-xml-schema/schemas/plugin-xml/v1/schema.xsd) for all attributes and defaults.
 
 ## Release
 
-`make release` installs the node modules, builds the script and creates `build/{name}.zip`, which can be uploaded in Spacialist. Only the folders and files referenced by the manifest are packaged (see `backend_dirs` and `package_files` in the `Makefile`).
+`make release` installs the node modules, builds the script and creates `build/{name}.zip`, which can be uploaded in Spacialist. Only the folders and files listed in `backend_dirs` and `package_files` in the `Makefile` are packaged. Keep these lists up to date: when you add a folder (e.g. `Controllers`) or a file the manifest references (e.g. `permissions.json`), add it there, otherwise it is missing from the package. A listed path that does not exist stops the build.

@@ -5,7 +5,7 @@
     Element names are lower case. Class paths are relative to App\Plugins\{name}.
 -->
 <plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="plugin.xsd">
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Severino/Spacialist/refs/heads/0.12-feat-plugin-xml-schema/schemas/plugin-xml/v1/schema.xsd">
     <!-- Plugin id. Must equal the plugin folder name and package.json "pluginName".
          The JS id in SpPS.register is the kebab-case version of it. -->
     <name>Template</name>
@@ -25,10 +25,6 @@
     </dependencies>
     <routes src="routes/api.php" middleware="api"/>
     <migrations src="migrations"/>
-    <permissions src="App/permissions.json"/>
-    <role-presets>
-        <file src="App/role-presets.json"/>
-    </role-presets>
     <css>
         <file src="src/exported.css"/>
     </css>
@@ -43,6 +39,10 @@
     <scopes>
         <scope src="Scopes/EntityScope" on="App\Entity"/>
     </scopes>
+    <permissions src="permissions.json"/>
+    <role-presets>
+        <file src="role-presets.json"/>
+    </role-presets>
     <accesspoints>
         <accesspoint id="template" label="plugin.template.title" path="/template"/>
     </accesspoints>
