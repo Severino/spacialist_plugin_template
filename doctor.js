@@ -16,7 +16,7 @@ let packageJson = null;
 let manifest = null;
 let db = null;
 const legacyInfoPath = join('App', 'info.xml');
-const infoName = 'manifest.xml';
+const infoName = 'plugin.xml';
 const infoPath = join(infoName);
 
 
@@ -287,7 +287,11 @@ async function useManifest(path) {
     if(manifest) return manifest;
 
     for(const path of [infoPath, legacyInfoPath]) {
-        manifest = await parseManifest(join(__dirname, path));
+        try {
+            manifest = await parseManifest(join(__dirname, path));
+        } catch(e) {
+            continue;
+        }
         if(manifest) {
             return manifest;
         }
@@ -300,7 +304,8 @@ async function useManifest(path) {
 
 async function parseManifest(path) {
     const manifest = await readFile(path);
-    const xmlParser = new XMLParser();
+    // Keep values as strings, otherwise a version like "1.0" is parsed as the number 1
+    const xmlParser = new XMLParser({ parseTagValue: false });
     const parsedManifest = xmlParser.parse(manifest);
     if(!parsedManifest) {
         throw new Error('File is not a valid XML file: ' + path);
@@ -491,7 +496,7 @@ async function callVerifyPackageJson() {
 async function getPackageJsonValues() {
     const packageJson = await usePackageJson();
     const missingFields = [];
-    const requiredFields = ['name', 'plugin_name', 'version', 'description'];
+    const requiredFields = ['name', 'pluginName', 'version', 'description'];
     requiredFields.forEach((field) => {
         if(packageJson[field] == null) {
             missingFields.push(field);
@@ -500,7 +505,7 @@ async function getPackageJsonValues() {
 
     return {
         name: packageJson.name,
-        pluginName: packageJson.plugin_name,
+        pluginName: packageJson.pluginName,
         version: packageJson.version,
         description: packageJson.description,
         missingFields,
@@ -523,7 +528,8 @@ async function callVerifyVersion() {
         return;
     }
 
-    const manifestVersion = manifest?.info?.version;
+    // <plugin> is the 0.12 root element, <info> the legacy one
+    const manifestVersion = (manifest?.plugin ?? manifest?.info)?.version;
     const packageJsonVersion = packageJson.version;
 
     if(!manifestVersion) {
@@ -531,7 +537,7 @@ async function callVerifyVersion() {
     }
 
     if(manifestVersion !== packageJson.version) {
-        warning(`Version in ${infoName} (v${packageJsonVersion}) did not match version in package.json (v${manifestVersion}). Updating package.json version to match ${infoName} => v${manifestVersion}`);
+        warning(`Version in ${infoName} (v${manifestVersion}) did not match version in package.json (v${packageJsonVersion}). Updating package.json version to match ${infoName} => v${manifestVersion}`);
         packageJson.version = manifestVersion;
         await writeFile('package.json', JSON.stringify(packageJson, null, 4));
     } else {

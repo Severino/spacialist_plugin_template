@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<info>
-    <!-- Must match id in JS SpPS.register call in kebab-case -->
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/Severino/Spacialist/refs/heads/0.12-feat-plugin-xml-schema/schemas/plugin-xml/v1/schema.xsd">
     <name>Template</name>
     <title>Template Plugin</title>
     <description>Base template for creating Plugins for Spacialist.</description>
@@ -9,22 +9,12 @@
     <authors>
         <author>Severin Opel</author>
     </authors>
-    <compatibility>
-        <spacialist></spacialist>
-        <php></php>
-    </compatibility>
+    <routes src="routes/api.php" middleware="api"/>
+    <migrations src="migrations"/>
     <css>
-        <file src="src/exported.css" name="default" />
+        <file src="src/exported.css"/>
     </css>
-    <dependencies>
-        <!-- Other plugins this plugin depends on -->
-    </dependencies>
     <attributes>
-        <!-- Attribute names must start with their plugin name -->
-        <attribute type="attribute" src="Attributes\TemplateAttribute" />        
+        <attribute src="Attributes/TemplateAttribute"/>
     </attributes>
-    <components>
-        <!-- Attribute names must start with their plugin name -->
-        <component name="TemplateAttribute" src="src/components/Attribute.vue" />
-    </components>
-</info>
+</plugin>
