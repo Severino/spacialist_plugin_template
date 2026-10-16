@@ -9,10 +9,11 @@ let pluginName;
 const xmlParser = new XMLParser();
 const manifestText = readFileSync('plugin.xml', 'utf8');
 const manifest = xmlParser.parse(manifestText);
-pluginName = manifest?.info?.name;
+// <plugin> is the 0.12 root element, <info> the legacy one
+pluginName = (manifest?.plugin ?? manifest?.info)?.name;
 
 if(!pluginName) {
-    throw new Error('manifest.xml does not contain a name');
+    throw new Error('plugin.xml does not contain a name');
 }
 // Check if Vite is running in development mode
 const isDev = process.env.NODE_ENV === 'development';

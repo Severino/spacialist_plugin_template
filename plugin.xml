@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<info>
-    <!-- Must match id in JS SpPS.register call in kebab-case -->
+<!--
+    Plugin manifest for Spacialist 0.12+.
+    Validate it with: npm run validate
+    Element names are lower case. Class paths are relative to App\Plugins\{name}.
+-->
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="plugin.xsd">
+    <!-- Plugin id. Must equal the plugin folder name and package.json "pluginName".
+         The JS id in SpPS.register is the kebab-case version of it. -->
     <name>Template</name>
     <title>Template Plugin</title>
     <description>Base template for creating Plugins for Spacialist.</description>
@@ -9,22 +16,35 @@
     <authors>
         <author>Severin Opel</author>
     </authors>
-    <compatibility>
-        <spacialist></spacialist>
-        <php></php>
-    </compatibility>
-    <css>
-        <file src="src/exported.css" name="default" />
-    </css>
     <dependencies>
+        <!-- The core version comes from `git describe`, so on the unreleased 0.12 branch it is
+             still 0.11.x and this would block the install. Enable it once 0.12.0 is tagged. -->
+        <!-- <core min="0.12.0"/> -->
         <!-- Other plugins this plugin depends on -->
+        <!-- <plugin name="File" min="2.0" max="3.0"/> -->
     </dependencies>
+    <routes src="routes/api.php" middleware="api"/>
+    <migrations src="migrations"/>
+    <permissions src="App/permissions.json"/>
+    <role-presets>
+        <file src="App/role-presets.json"/>
+    </role-presets>
+    <css>
+        <file src="src/exported.css"/>
+    </css>
     <attributes>
-        <!-- Attribute names must start with their plugin name -->
-        <attribute type="attribute" src="Attributes\TemplateAttribute" />        
+        <!-- The datatype ($type) of an attribute should start with the plugin name -->
+        <attribute src="Attributes/TemplateAttribute"/>
     </attributes>
-    <components>
-        <!-- Attribute names must start with their plugin name -->
-        <component name="TemplateAttribute" src="src/components/Attribute.vue" />
-    </components>
-</info>
+    <!--
+    <hooks>
+        <hook on="api/v1/entity/{id}" method="GET" src="Hooks/EntityHook@afterShow" order="0"/>
+    </hooks>
+    <scopes>
+        <scope src="Scopes/EntityScope" on="App\Entity"/>
+    </scopes>
+    <accesspoints>
+        <accesspoint id="template" label="plugin.template.title" path="/template"/>
+    </accesspoints>
+    -->
+</plugin>

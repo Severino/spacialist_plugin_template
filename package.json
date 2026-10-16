@@ -8,7 +8,8 @@
         "dev": "vite",
         "watch": "vite build --watch",
         "build": "vite build",
-        "doctor": "node doctor.js --call"
+        "doctor": "node doctor.js --call",
+        "validate": "xmllint --noout --schema plugin.xsd plugin.xml"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^4.5.2",

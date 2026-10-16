@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Plugins\Template\App\Template;
+namespace App\Plugins\Template\App;
 
 class Template
 {
